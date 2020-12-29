@@ -13,7 +13,6 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/nikhiljohn10/SwiftyJSON.git", from: "5.0.1"),
         .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.4"),
     ],
     targets: [
@@ -21,10 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "iFaye",
-            dependencies: [
-              ._byNameItem(name: "SwiftyJSON"),
-              ._byNameItem(name: "Starscream")
-            ]),
+            dependencies: ["Starscream"]),
         .testTarget(
             name: "iFayeTests",
             dependencies: ["iFaye"]),
