@@ -1,9 +1,8 @@
 //
-//  FayeClient+Subscriptions.swift
-//  Pods
+//  Subscriptions.swift
 //
-//  Created by Shams Ahmed on 19/07/2016.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
@@ -88,7 +87,7 @@ extension FayeClient {
     func removeChannelFromQueuedSubscriptions(_ channel: String) -> Bool {
         var result = false
         queuedSubsLockQueue.sync {
-            let index = self.queuedSubscriptions.index { $0.subscription == channel }
+            let index = self.queuedSubscriptions.firstIndex { $0.subscription == channel }
             
             if let index = index {
                 self.queuedSubscriptions.remove(at: index)
@@ -103,7 +102,7 @@ extension FayeClient {
     func removeChannelFromPendingSubscriptions(_ channel: String) -> Bool {
         var result = false
         pendingSubsLockQueue.sync {
-            let index = self.pendingSubscriptions.index { $0.subscription == channel }
+            let index = self.pendingSubscriptions.firstIndex { $0.subscription == channel }
             
             if let index = index {
                 self.pendingSubscriptions.remove(at: index)
@@ -118,7 +117,7 @@ extension FayeClient {
     func removeChannelFromOpenSubscriptions(_ channel: String) -> Bool {
         var result = false
         openSubsLockQueue.sync {
-            let index = self.openSubscriptions.index { $0.subscription == channel }
+            let index = self.openSubscriptions.firstIndex { $0.subscription == channel }
             
             if let index = index {
                 self.openSubscriptions.remove(at: index)
@@ -129,10 +128,31 @@ extension FayeClient {
         
         return result
     }
+    
+    // MARK: Private - Timer Action
+    @objc
+    func pendingSubscriptionsAction(_ timer: Timer) {
+        guard fayeConnected == true else {
+            print("Faye: Failed to resubscribe to all pending channels, socket disconnected")
+            
+            return
+        }
+        
+        resubscribeToPendingSubscriptions()
+    }
 }
 
-extension String {
-    func encodeToBase64() -> String {
-        return Data(self.utf8).base64EncodedString()
+public extension FayeClient {
+    
+    // MARK: Helper
+    
+    ///  Validate whatever a subscription has been subscribed correctly
+    func isSubscribedToChannel(_ channel:String) -> Bool {
+        return self.openSubscriptions.contains { $0.subscription == channel }
+    }
+    
+    ///  Validate faye transport is connected
+    func isTransportConnected() -> Bool {
+        return self.transport?.isConnected ?? false
     }
 }

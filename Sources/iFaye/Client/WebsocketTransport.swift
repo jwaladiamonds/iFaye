@@ -1,9 +1,8 @@
 //
 //  WebsocketTransport.swift
-//  Pods
 //
-//  Created by Haris Amin on 2/20/16.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
@@ -42,7 +41,7 @@ class WebsocketTransport: Transport {
         if let webSocket = self.webSocket {
             webSocket.delegate = self
             webSocket.connect()
-            print("Faye: Opening connection with \(self.urlString)")
+            print("Faye: Opening connection with \(String(describing: self.urlString))")
         }
     }
 
@@ -76,36 +75,44 @@ class WebsocketTransport: Transport {
 }
 
 extension WebsocketTransport: WebSocketDelegate {
+    
     func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):
-            print("websocket is connected: \(headers)")
             socketConnected = true
+            print("Faye: Websocket is connected: \(headers)")
             self.delegate?.didConnect()
         case .disconnected(let reason, let code):
             socketConnected = false
-            print("websocket is disconnected for reason: \(reason) /n with code: \(code)")
+            print("Faye: Websocket is disconnected: \(reason) with code: \(code)")
             websocketDidDisconnect(withReason: reason, andCode: code)
         case .text(let text):
+            print("Faye: Received text: \(text)")
             self.delegate?.didReceiveMessage(text)
         case .binary(let data):
             print("Faye: Received data: \(data.count)")
             self.delegate?.didReceiveData(data)
-        case .pong(let data):
-            // FIXME: Data should be forwarded on
-            self.delegate?.didReceivePong()
-        case .ping(let data):
+        case .ping(_):
             self.delegate?.didReceivePing()
-        case .error(let error):
             break
-        case .viablityChanged(_):
+        case .pong(_):
+            self.delegate?.didReceivePong()
+            break
+        case .viabilityChanged(_):
             break
         case .reconnectSuggested(_):
             break
         case .cancelled:
+            socketConnected = false
             break
-        @unknown default:
+        case .error(let error):
+            socketConnected = false
+            handleError(error)
             break
         }
+    }
+    
+    func handleError(_ error: Error?) {
+        print(error?.localizedDescription ?? "Unknown Error")
     }
 }

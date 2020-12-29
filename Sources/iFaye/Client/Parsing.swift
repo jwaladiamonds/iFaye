@@ -1,9 +1,8 @@
 //
-//  FayeClient+Parsing.swift
-//  Pods
+//  Parsing.swift
 //
-//  Created by Shams Ahmed on 19/07/2016.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
@@ -62,7 +61,7 @@ extension FayeClient {
 
                             self.delegate?.subscriptionFailedWithError(
                                 self,
-                                error: subscriptionError.error(subscription: subscription, error: error)
+                                error: SubscriptionError.error(subscription: subscription, error: error)
                             )
                         }
                     }

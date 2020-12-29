@@ -1,9 +1,8 @@
 //
-//  FayeClient+Bayuex.swift
-//  Pods
+//  Bayuex.swift
 //
-//  Created by Shams Ahmed on 19/07/2016.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
@@ -12,59 +11,25 @@ import Foundation
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
-
-// MARK: Bayuex Connection Type
-public enum BayeuxConnection: String {
-    case LongPolling = "long-polling"
-    case Callback = "callback-polling"
-    case iFrame = "iframe"
-    case WebSocket = "websocket"
-}
-
-// MARK: BayuexChannel Messages
-public enum BayeuxChannel: String, Encodable, Equatable{
-    case Handshake = "/meta/handshake"
-    case Connect = "/meta/connect"
-    case Disconnect = "/meta/disconnect"
-    case Subscribe = "/meta/subscribe"
-    case Unsubscibe = "/meta/unsubscribe"
-}
-
-// MARK: Bayuex Parameters
-public enum Bayeux: String {
-    case Channel = "channel"
-    case Version = "version"
-    case ClientId = "clientId"
-    case ConnectionType = "connectionType"
-    case Data = "data"
-    case Subscription = "subscription"
-    case Id = "id"
-    case MinimumVersion = "minimumVersion"
-    case SupportedConnectionTypes = "supportedConnectionTypes"
-    case Successful = "successful"
-    case Error = "error"
-    case Advice = "advice"
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l > r
+    default:
+        return rhs < lhs
+    }
 }
 
 // MARK: Private Bayuex Methods
@@ -90,7 +55,7 @@ extension FayeClient {
             dict[Bayeux.Channel.rawValue] = BayeuxChannel.Handshake.rawValue as AnyObject?
             dict[Bayeux.Version.rawValue] = "1.0" as AnyObject?
             dict[Bayeux.MinimumVersion.rawValue] = "1.0beta" as AnyObject?
-            dict[Bayeux.SupportedConnectionTypes.rawValue] = connTypes as? AnyObject
+            dict[Bayeux.SupportedConnectionTypes.rawValue] = connTypes as AnyObject
             send(dict)
         }
     }
@@ -120,11 +85,11 @@ extension FayeClient {
             let dict:[String:AnyObject] = [Bayeux.Channel.rawValue: BayeuxChannel.Disconnect.rawValue as AnyObject,
                                            Bayeux.ClientId.rawValue: clientId as AnyObject,
                                            Bayeux.ConnectionType.rawValue: BayeuxConnection.WebSocket.rawValue as AnyObject]
-
+            
             send(dict)
         }
     }
-
+    
     // Bayeux Subscribe
     // "channel": "/meta/subscribe",
     // "clientId": "Un1q31d3nt1f13r",
@@ -139,7 +104,7 @@ extension FayeClient {
                 
                 self.transport?.writeString(string)
                 self.pendingSubscriptions.append(model)
-
+                
             } catch {
                 // TODO: catch this error
             }

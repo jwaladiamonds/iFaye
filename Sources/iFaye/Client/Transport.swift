@@ -1,9 +1,8 @@
 //
-//  FayeClient+Transport.swift
-//  Pods
+//  Transport.swift
 //
-//  Created by Shams Ahmed on 19/07/2016.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation

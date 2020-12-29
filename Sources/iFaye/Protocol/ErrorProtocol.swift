@@ -1,12 +1,15 @@
 //
-//  NSError+Helper.swift
-//  Pods
+//  ErrorProtocol.swift
+//  
 //
-//  Created by Shams Ahmed on 17/02/2016.
-//
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
+
+public enum SubscriptionError: Error {
+    case error(subscription: String, error: String)
+}
 
 public enum FayeSocketError {
     case lostConnection, transportWrite
@@ -19,6 +22,6 @@ public extension NSError {
     
     /// Helper to create a error object for faye realted issues
     convenience init(error: FayeSocketError) {
-        self.init(domain: "com.hamin.fayeswift", code: 10000, userInfo: nil)
+        self.init(domain: "diamonds.jwala.ifaye", code: 10000, userInfo: nil)
     }
 }

@@ -1,16 +1,11 @@
 //
-//  FayeClientDelegate.swift
-//  Pods
+//  ClientDelegateProtocol.swift
 //
-//  Created by Haris Amin on 2/20/16.
 //
+//  Created by Nikhil John on 29/12/20.
 //
 
 import Foundation
-
-public enum subscriptionError: Error {
-    case error(subscription: String, error: String)
-}
 
 // MARK: FayeClientDelegate Protocol
 public protocol FayeClientDelegate: NSObjectProtocol {
@@ -22,6 +17,6 @@ public protocol FayeClientDelegate: NSObjectProtocol {
     func connectionFailed(_ client:FayeClient)
     func didSubscribeToChannel(_ client:FayeClient, channel:String)
     func didUnsubscribeFromChannel(_ client:FayeClient, channel:String)
-    func subscriptionFailedWithError(_ client:FayeClient, error:subscriptionError)
+    func subscriptionFailedWithError(_ client:FayeClient, error:SubscriptionError)
     func fayeClientError(_ client:FayeClient, error:NSError)
 }
