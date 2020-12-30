@@ -13,6 +13,18 @@ ___**Version: 0.1.1**___
 
 iFaye requires at least iOS 14/MacOS 11 or above.
 
+## Gitter Faye Test Client
+
+This is a simple Faye client to receive messages using NodeJS
+
+Client location: `Tests/NodeClient`
+
+To install: `npm install`
+
+Change `token` variable inside `client.js` to access your gitter client.
+
+To run: `npm start`
+
 ## License
 
 iFaye is licensed under the MIT License.
