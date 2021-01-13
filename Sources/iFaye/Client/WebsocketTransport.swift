@@ -9,8 +9,8 @@ import Foundation
 import Starscream
 
 class WebsocketTransport: Transport {
-    var urlString:String?
-    var webSocket:WebSocket?
+    var urlString: String?
+    var webSocket: WebSocket?
     var headers: [String: String]? = nil
     weak var delegate:TransportDelegate?
     private var socketConnected: Bool = false
@@ -21,7 +21,6 @@ class WebsocketTransport: Transport {
 
     convenience required internal init(url: String) {
         self.init()
-
         self.urlString = url
     }
 
